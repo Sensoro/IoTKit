@@ -15,8 +15,8 @@
 #define LP3944_I2CADDR      0x60
 #define LIS3DH_I2CADDR      0X19
 
-#define MOTO_ANODE_PIN            7
-#define MOTO_CATHODE_PIN          2
+#define MOTO_ANODE_PIN      7
+#define MOTO_CATHODE_PIN    2
 
 #define DEFAULT_BLE_TXP     0
 #define DEFAULT_BLE_INTV    100
@@ -25,33 +25,32 @@
 #define led1_green          LP3944_LED1
 #define led1_blue           LP3944_LED2
 
-
 #define CMD_LED             0X00
 #define CMD_MOTO            0X01
 
 
-IOTModule   module;
-OPT3001     lightSensor(OPT3001_I2CADDR);
-SHT3XD      tempHumiSensor(SHT3XD_I2CADDR);
-Moto        moto(MOTO_ANODE_PIN, MOTO_CATHODE_PIN);
-LIS3MDL     magSensor;
-LP3944      ledDriver(LP3944_I2CADDR);
+IOTModule                   module;
+OPT3001                     lightSensor(OPT3001_I2CADDR);
+SHT3XD                      tempHumiSensor(SHT3XD_I2CADDR);
+Moto                        moto(MOTO_ANODE_PIN, MOTO_CATHODE_PIN);
+LIS3MDL                     magSensor;
+LP3944                      ledDriver(LP3944_I2CADDR);
 
-Adafruit_LIS3DH lis = Adafruit_LIS3DH();
+Adafruit_LIS3DH lis         = Adafruit_LIS3DH();
 
 /*Iot收数据结构体*/
-IotRcvData_t IotRcvDataArray[2];
-uint8_t IotRcvDataArrayLen = 0;
+static IotRcvData_t         IotRcvDataArray[2];
+static uint8_t              IotRcvDataArrayLen = 0;
 
 /*用于存放蓝牙广播数据*/
-uint8_t BleAdvData[19] = {0};
-uint8_t BleAdvDataLen = 0;
-
-void lightSensorCfg();
+static uint8_t              BleAdvData[19] = {0};
+static uint8_t              BleAdvDataLen = 0;
 
 /*用于存放Iot数据*/
-static uint8_t TxBuff[32];
-static uint8_t TxBuffLen = 0;
+static uint8_t              TxBuff[32] = {0};
+static uint8_t              TxBuffLen = 0;
+
+void lightSensorCfg();
 
 void setup() {
 
@@ -196,7 +195,7 @@ void loop() {
 }
 
 /* @brief 处理接收到的数据
- */
+*/
 void processRcvData(uint8_t *data, uint8_t len)
 {
   uint8_t type = 0;
@@ -246,7 +245,7 @@ void processRcvData(uint8_t *data, uint8_t len)
 }
 
 /* @brief 采集温度湿度光线数据，放到TxBuff里（第0byte为前缀0x00）及BleAdvData里，
- */
+*/
 void prepareIotPkt0AndBleData(void)
 {
   BleAdvDataLen = 0;
@@ -309,7 +308,7 @@ void prepareIotPkt0AndBleData(void)
 }
 
 /* @brief 采集加速度计数据，放到TxBuff里（第0byte为前缀0x01）
- */
+*/
 void prepareIotPkt1(void)
 {
   TxBuffLen = 0;
@@ -338,7 +337,7 @@ void dump_data(uint8_t *p_buff, uint8_t len)
 }
 
 /* @brief 光感配置
- */
+*/
 void lightSensorCfg() {
 
   OPT3001_Config newConfig;
